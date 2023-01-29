@@ -11,7 +11,7 @@ snippet_features = ["title",
 unsafe_characters = ['\n', '"']
 
 # Used to identify columns, currently hardcoded order
-header = ["video_id"] + snippet_features + ["trending_date", "tags", "view_count", "likes", "dislikes",
+header = ["video_id"] + snippet_features + ["trending_date", "tags", "view_count", "likes",
                                             "comment_count", "thumbnail_link", "comments_disabled",
                                             "ratings_disabled", "description"]
 
@@ -78,13 +78,11 @@ def get_videos(items):
 
         # This may be unclear, essentially the way the API works is that if a video has comments or ratings disabled
         # then it has no feature for it, thus if they don't exist in the statistics dict we know they are disabled
-        if 'likeCount' in statistics and 'dislikeCount' in statistics:
+        if 'likeCount' in statistics:
             likes = statistics['likeCount']
-            dislikes = statistics['dislikeCount']
         else:
             ratings_disabled = True
             likes = 0
-            dislikes = 0
 
         if 'commentCount' in statistics:
             comment_count = statistics['commentCount']
@@ -93,7 +91,7 @@ def get_videos(items):
             comment_count = 0
 
         # Compiles all of the various bits of info into one consistently formatted line
-        line = [video_id] + features + [prepare_feature(x) for x in [trending_date, tags, view_count, likes, dislikes,
+        line = [video_id] + features + [prepare_feature(x) for x in [trending_date, tags, view_count, likes,
                                                                        comment_count, thumbnail_link, comments_disabled,
                                                                        ratings_disabled, description]]
         lines.append(",".join(line))
